@@ -62,8 +62,7 @@ class Notification:
             self.send_message("연금복권 꽝")
 
     def send_message(self, message: str) -> None:
-        pass
-        # self._send_chaeyk_webhook(message)
+        self._send_chaeyk_webhook(message)
 
     def _send_discord_webhook(self, message: str) -> None:        
         webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
