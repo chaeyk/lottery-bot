@@ -117,6 +117,7 @@ class Lotto645:
         soup = BS(
             html, "html5lib"
         )
+        print(html)
         draw_date = soup.find("input", id="ROUND_DRAW_DATE").get('value')
         tlmt_date = soup.find("input", id="WAMT_PAY_TLMT_END_DT").get('value')
 
@@ -188,7 +189,7 @@ class Lotto645:
         winnings = soup.find("table", class_="tbl_data tbl_data_col").find_all("tbody")[0].find_all("td")        
 
         result_data = {
-            "data": "no winning data"
+            "win": False
         }
         
         if len(winnings) == 1:
@@ -196,6 +197,7 @@ class Lotto645:
             
 
         result_data = {
+            "win": True,
             "round": winnings[2].text.strip(),
             "money": winnings[6].text.strip(),
             "purchased_date": winnings[0].text.strip(),

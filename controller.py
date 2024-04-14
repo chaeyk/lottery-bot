@@ -31,35 +31,35 @@ def check_winning_win720(authCtrl: auth.AuthController) -> dict:
     item = pension.check_winning(authCtrl)
     return item
 
-def send_message(mode: int, lottery_type: int, response: dict, webhook_url: str):
+def send_message(mode: int, lottery_type: int, response: dict):
     notify = notification.Notification()
 
     if mode == 0:
         if lottery_type == 0:
-            notify.send_lotto_winning_message(response, webhook_url)
+            notify.send_lotto_winning_message(response)
         else:
-            notify.send_win720_winning_message(response, webhook_url)
+            notify.send_win720_winning_message(response)
     elif mode == 1: 
         if lottery_type == 0:
-            notify.send_lotto_buying_message(response, webhook_url)
+            notify.send_lotto_buying_message(response)
         else:
-            notify.send_win720_buying_message(response, webhook_url)
+            notify.send_win720_buying_message(response)
 
 def check():
     load_dotenv()
 
     username = os.environ.get('USERNAME')
     password = os.environ.get('PASSWORD')
-    slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL') 
-    discord_webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
 
     globalAuthCtrl = auth.AuthController()
     globalAuthCtrl.login(username, password)
     response = check_winning_lotto645(globalAuthCtrl)
-    send_message(0, 0, response=response, webhook_url=discord_webhook_url)
+    print(f'lotto645 result: {response}')
+    send_message(0, 0, response=response)
 
     response = check_winning_win720(globalAuthCtrl)
-    send_message(0, 1, response=response, webhook_url=discord_webhook_url)
+    print(f'win720 result: {response}')
+    send_message(0, 1, response=response)
 
 def buy(): 
     
@@ -68,18 +68,16 @@ def buy():
     username = os.environ.get('USERNAME')
     password = os.environ.get('PASSWORD')
     count = int(os.environ.get('COUNT'))
-    slack_webhook_url = os.environ.get('SLACK_WEBHOOK_URL') 
-    discord_webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
     mode = "AUTO"
 
     globalAuthCtrl = auth.AuthController()
     globalAuthCtrl.login(username, password)
 
     response = buy_lotto645(globalAuthCtrl, count, mode) 
-    send_message(1, 0, response=response, webhook_url=discord_webhook_url)
+    send_message(1, 0, response=response)
 
     response = buy_win720(globalAuthCtrl) 
-    send_message(1, 1, response=response, webhook_url=discord_webhook_url)
+    send_message(1, 1, response=response)
 
 def run():
     if len(sys.argv) < 2:
@@ -93,4 +91,10 @@ def run():
   
 
 if __name__ == "__main__":
-    run()
+    try:
+        run()
+    except Exception as e:
+        notify = notification.Notification()
+        notify.send_message(f'{sys.argv[1]} 실패!!')
+        raise
+        
