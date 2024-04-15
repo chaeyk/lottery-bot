@@ -67,9 +67,9 @@ def buy():
 
     username = os.environ.get('USERNAME')
     print(f'username = {username}')
-    print(f'count = {os.environ.get('COUNT')}')
     password = os.environ.get('PASSWORD')
     count = int(os.environ.get('COUNT'))
+    print(f'count = {count}')
     mode = "AUTO"
 
     globalAuthCtrl = auth.AuthController()
