@@ -22,5 +22,4 @@ jobs:
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          COUNT: ${{ env.COUNT }}
           CHAEYK_WEBHOOK_URL:  ${{ secrets.CHAEYK_WEBHOOK_URL }}
